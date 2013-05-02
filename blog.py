@@ -8,12 +8,12 @@ import hashlib
 import random
 import json
 import time
+import cgi
 from google.appengine.api import memcache
 from google.appengine.ext import db
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
-jinja_env = jinja2.Environment(autoescape=True,
-	loader = jinja2.FileSystemLoader(template_dir))
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 
 secret = 'awefiOASJIAOD#&783'
 latest_query_time = 0
@@ -45,15 +45,31 @@ def get_front_page_data(update = False):
 
 	key = 'top'
 	arts = memcache.get(key)
-	print "ran get_front_page_data()"
-	print arts
 	if arts is None or update:
 		latest_query_time = int(round(time.time()))
 		arts = db.GqlQuery("SELECT * FROM Post ORDER BY created DESC LIMIT 10")
 		arts = list(arts)
 		memcache.set(key, arts)
-		print "set memcache"
 	return arts
+
+# gives me some bolding and paragraphing capabilities
+def parse_post(string):
+	output = ''
+	start_bold = False
+
+	for char in string:
+		if char == '*':
+			if start_bold:
+				output += '</strong>'
+				start_bold = False
+			else:
+				output += '<strong>'
+				start_bold = True
+		else:
+			output += char
+
+	output = output.replace(chr(13) + chr(10) + chr(13) + chr(10), '</p><p>')
+	return output
 
 def get_blog_post_data(postid, update = False):
 	global post_query_times
@@ -144,10 +160,9 @@ class LoginPage(Handler):
 				self.response.headers.add_header('Set-Cookie', str('username=%s|%s; Path=/' % (username, h)))
 				self.redirect('/welcome')
 			else:
-				print "incorrect password\n"
 				self.render('login.html', error='invalid username or password')
 		else:
-			print "not finding user\n"
+
 			self.render('login.html', error='invalid username or password')
 
 class LogoutPage(Handler):
@@ -160,7 +175,6 @@ class FrontPage(Handler):
 		# queries and retrieves posts
 		posts = get_front_page_data()
 		# renders with posts
-		print 
 		self.render('front.html', posts=posts, time=str(int(round(time.time() - latest_query_time))))
 
 class FrontPageJson(Handler):
@@ -179,7 +193,7 @@ class NewPostPage(Handler):
 		content = self.request.get("content")
 
 		if subject and content:
-			newpost = Post(subject=subject, content=content)
+			newpost = Post(subject=cgi.escape(subject), content=parse_post(cgi.escape(content)))
 			newpost.put()
 			memcache.set('top', None)
 
@@ -195,9 +209,7 @@ class PostPage(Handler):
 		post = get_blog_post_data(entry_id)
 
 		if post:
-			self.render('post.html', subject=post.subject, 
-															 content=post.content, 
-															 date=post.created,
+			self.render('post.html', post = post,
 															 time=str(int(round(time.time() - post_query_times[entry_id]))))
 		else:
 			subject = "404 error"
