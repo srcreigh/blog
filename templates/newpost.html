@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Shane Creighton-Young</title>
+		<link href='http://fonts.googleapis.com/css?family=Libre+Baskerville' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	</head>
+
+	<body>
+		<div id="header-wrapper">
+			<div id="header">
+				<h1>Shane Creighton-Young</h1>
+			</div>
+		</div>
+
+		<div id="content-wrapper">
+			<div id="content">
+				<div id="main">
+					<div class="post">
+						<h2>New Post</h2>
+						<form method="post">
+							<h4>Subject</h4>
+							<input type="text" name="subject" value="{{ subject }}"/>
+							<br />
+
+							<h4>Content</h4>
+							<textarea rows="20" cols="50" name="content">{{ content }}</textarea>
+							<br />
+
+							<span class="error">{{ error }}</span>
+							<br />
+
+							<input type="submit">
+						</form>
+					</div>
+				</div>
+
+				<div id="sidebar">
+					<div class="post">
+						<h2>Hi. I'm Shane.</h2>
+		        <hr />
+						<p>I'm studying Computer Science at the University of Waterloo.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
