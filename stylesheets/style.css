@@ -33,6 +33,7 @@ html, body {
 }
 
 #header h1 {
+   display: inline;
 	font-weight: normal;
 	font-family: "Georgia", serif;
 	font-size: 3em;
@@ -40,7 +41,25 @@ html, body {
 
 #header h1 a, a:visited {
 	color: white;
-	text-decoration: none;
+   text-decoration: none;
+}
+
+#header #nav {
+   margin-top: 20px;
+   margin-right: 10px;
+   float: right;
+}
+
+#header #nav li {
+   display: inline;
+   margin-right: 10px;
+}
+
+#header #nav a, a:visited {
+   color: white;
+   text-decoration: none;
+   font-size: 20px;
+   font-family: "Libre Baskerville", serif;
 }
 
 /* Content */
@@ -96,6 +115,13 @@ html, body {
 	padding: 15px;
 	border: 1px solid #888;
 	box-shadow: 0px 0 15px -5px #888888;
+}
+
+.time {
+	font-family: "Arial", sans-serif;
+	font-size: 10px;
+	position: relative;
+	right: 0;
 }
 
 /* Paragraphs */

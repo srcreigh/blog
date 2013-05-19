@@ -11,8 +11,14 @@
 		<div id="header-wrapper">
 			<div id="header">
 				<h1><a href="/">Shane Creighton-Young</a></h1>
-			</div>
-		</div>
+            <div id="nav">
+               <ul>
+                  <li><a href="/newpost">New Post</a></li>
+                  <li><a href="http://www.github.com/srcreigh/blog">Source Code</a></li>
+               </ul>
+            </div>
+				</div>
+	   </div>
 
 		<div id="content-wrapper">
 			<div id="content">
@@ -20,6 +26,7 @@
 					<div class="post">
 						<h2><a href="/{{ post.key().id() }}">{{ post.subject }}</a></h2>
 						<hr /> 
+						<!--<span class="time">{{ post.created.strftime("%A, %B %d. %r") }}</span>-->
 						<p>{{ post.content }}</p>
 					</div>
 				</div>
